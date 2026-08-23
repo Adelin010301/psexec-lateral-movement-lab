@@ -1,45 +1,24 @@
-# PsExec Lateral Movement — Detection & Response Case Study
+# Screenshots
 
-A hands-on home SOC lab exercise simulating PsExec-style lateral movement (SMB / remote service execution) against a segmented Windows target, with full detection validation across Sysmon, native Windows event logs, and Splunk — including a scheduled detection alert.
+Place your screenshots in this folder using the filenames below — `case-study.md` already references these exact names, so once you drop the files in and rename them, the images will render automatically on GitHub.
 
-## What's in this repo
-
-| File | Description |
+| Filename | What it should show |
 |---|---|
-| [`case-study.md`](./case-study.md) | Full write-up: attack narrative, detection evidence, Splunk alert build, and recommended response actions |
-| [`screenshots/`](./screenshots) | Supporting evidence — terminal output, Splunk searches, Windows Defender detection, alert configuration |
+| `01-lab-topology.png` | Your lab network diagram (pfSense/LAN/OPT1/Splunk/target/attacker) — from your GitHub README diagram, or a fresh export |
+| `02-nmap-filtered.png` | The `nmap -Pn -p 445` scan showing `445/tcp filtered microsoft-ds` |
+| `03-nmap-open.png` | The re-scan showing `445/tcp open microsoft-ds` after the firewall profile fix |
+| `04-share-access-denied.png` | Terminal output showing `share 'ADMIN$' is not writable` / `share 'C$' is not writable` |
+| `05-psexec-success.png` | Terminal output showing `Found writable share ADMIN$`, `Uploading file`, `Creating service`, `Starting service` |
+| `06-sysmon-event3-network.png` | Splunk search result for Sysmon EventCode=3 (network connection) |
+| `07-sysmon-event11-filecreate.png` | Splunk search result for Sysmon EventCode=11 showing `TargetFilename: C:\Windows\ufHkjTiA.exe` |
+| `08-system-event7045-service.png` | Splunk search result for System EventCode=7045 showing `Service Name: MtlW` |
+| `09-sysmon-event1-process.png` | Splunk search result for Sysmon EventCode=1 showing `ParentImage: C:\Windows\System32\services.exe` |
+| `10-defender-detection.png` | Windows Security Center screenshot showing `VirTool:Win32/RemoteExec` flagged Severe |
+| `11-alert-config.png` | Splunk "Save As Alert" configuration screen (search, schedule, trigger condition) |
+| `12-alert-triggered.png` | Splunk **Activity → Triggered Alerts** entry showing the alert fired |
 
-## Summary
+## Notes
 
-This exercise covers the full lifecycle of a lateral movement attack in a lab environment:
-
-- **Reconnaissance** — port scanning to identify SMB exposure
-- **Defense interaction** — diagnosing and adjusting a Windows Firewall network profile blocking SMB (Public → Private), and UAC Remote Restrictions blocking admin share access
-- **Exploitation** — PsExec-style remote execution via Impacket, from a Kali Linux attacker host to a Windows 10 target
-- **Detection** — full-chain correlation across Sysmon (network connection, file creation, process creation) and native Windows Service Control Manager logging (service installation), independently corroborated by a real-time Windows Defender detection
-- **Detection engineering** — a scheduled Splunk alert built to catch this technique going forward, not just a one-time investigative search
-
-## Lab environment
-
-| Component | Details |
-|---|---|
-| Firewall / segmentation | pfSense — LAN (192.168.10.0/24), isolated management network OPT1 (192.168.20.0/24) |
-| SIEM | Splunk Enterprise, on Ubuntu |
-| Target | Windows 10, Sysmon + Splunk Universal Forwarder installed |
-| Attacker | Kali Linux |
-| Endpoint protection | Windows Defender (default configuration) |
-
-All hosts run in an isolated VirtualBox lab network with no route to production or external systems.
-
-## MITRE ATT&CK mapping
-
-- [T1021.002 — Remote Services: SMB/Windows Admin Shares](https://attack.mitre.org/techniques/T1021/002/)
-- [T1569.002 — System Services: Service Execution](https://attack.mitre.org/techniques/T1569/002/)
-
-## Related work
-
-- [Botium Toys — NIST CSF Security Audit](https://github.com/Adelin010301)
-- [Phishing Email Incident Report](https://github.com/Adelin010301)
-
----
-**Author:** Norbert Adelin Fratutiu — [GitHub](https://github.com/Adelin010301) · [LinkedIn](https://linkedin.com/in/adelin-fratutiu-07406a195)
+- Crop screenshots to the relevant window/pane where possible — full-desktop screenshots with multiple windows are harder to read once embedded in GitHub's markdown renderer.
+- If any screenshot contains a real password or other sensitive value in plaintext (some of your terminal captures did during this exercise), redact it with a black box or crop it out before committing.
+- PNG or JPG both work fine; keep file sizes reasonable (a few hundred KB each) so the repo stays lightweight.
