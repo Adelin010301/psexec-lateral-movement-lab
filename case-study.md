@@ -96,7 +96,7 @@ New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\
   -Name LocalAccountTokenFilterPolicy -Value 1 -PropertyType DWord -Force
 ```
 
-![Failed admin share access — UAC remote restrictions](./screenshots/04-share-access-denied.png)
+
 
 ### 3.4 Exploitation — PsExec Remote Execution
 
